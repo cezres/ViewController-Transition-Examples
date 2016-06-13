@@ -22,4 +22,15 @@ class TransitioningDelegate: NSObject, UIViewControllerTransitioningDelegate {
         return UIPresentationController(presentedViewController: presented, presentingViewController: presenting)
     }
     
+    
+    var interactive = false
+    let interactionController = UIPercentDrivenInteractiveTransition()
+    
+    func interactionControllerForDismissal(animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return interactive ? interactionController : nil
+    }
+    
+    func interactionControllerForPresentation(animator: UIViewControllerAnimatedTransitioning) -> UIViewControllerInteractiveTransitioning? {
+        return interactive ? interactionController : nil
+    }
 }

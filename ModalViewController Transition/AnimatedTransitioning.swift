@@ -27,11 +27,11 @@ class AnimatedTransitioning: NSObject, UIViewControllerAnimatedTransitioning {
             
             containerView?.addSubview(toVC.view)
             
-//            toVC.view.alpha = 0
+            toVC.view.alpha = 0
             toVC.view.transform = CGAffineTransformTranslate(toVC.view.transform, toVC.view.frame.size.width, 0)
             UIView.animateWithDuration(transitionDuration(transitionContext), animations: {
                 //
-//                toVC.view.alpha = 1
+                toVC.view.alpha = 1
                 toVC.view.transform = CGAffineTransformTranslate(toVC.view.transform, -toVC.view.frame.size.width, 0)
             }, completion: { (ff) in
                 //
@@ -45,6 +45,7 @@ class AnimatedTransitioning: NSObject, UIViewControllerAnimatedTransitioning {
             UIView.animateWithDuration(transitionDuration(transitionContext), animations: {
                 //
                 fromVC.view.alpha = 0
+                fromVC.view.transform = CGAffineTransformTranslate(fromVC.view.transform, fromVC.view.frame.size.width, 0)
             }, completion: { (ff) in
                 //
                 let isCancelled = transitionContext.transitionWasCancelled()

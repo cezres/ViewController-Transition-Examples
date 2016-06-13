@@ -21,22 +21,61 @@ class ModalViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    deinit {
+        print(#function)
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        view.backgroundColor = UIColor.orangeColor()
+        view.backgroundColor = UIColor.grayColor()
         
         
         let tap = UITapGestureRecognizer(target: self, action: #selector(ModalViewController.dismiss))
         view.addGestureRecognizer(tap)
+        
+        let panGesture: UIPanGestureRecognizer = UIPanGestureRecognizer()
+        panGesture.addTarget(self, action: #selector(ModalViewController.handlePan(_:)))
+        view.addGestureRecognizer(panGesture)
         
     }
     
     func dismiss() {
         dismissViewControllerAnimated(true) { 
             print("DismissViewController")
+        }
+    }
+    
+    func handlePan(panGesture: UIPanGestureRecognizer) {
+        let translationX =  panGesture.translationInView(view).x
+        let progress = translationX / view.frame.width * 2
+        
+//        print(progress)
+        
+        switch panGesture.state {
+        case .Began:
+            print("Began")
+            transitionDelegate.interactive = true
+            dismiss()
+            break
+        case .Changed:
+            transitionDelegate.interactionController.updateInteractiveTransition(progress>1 ? 1 : progress)
+            break
+        case .Cancelled, .Ended:
+            print("Cancelled")
+            transitionDelegate.interactionController.completionSpeed = 0.99
+            if progress > 0.5 {
+                transitionDelegate.interactionController.finishInteractiveTransition()
+            }
+            else {
+                transitionDelegate.interactionController.cancelInteractiveTransition()
+            }
+            transitionDelegate.interactive = false
+            break
+        default:
+            break
         }
     }
 
